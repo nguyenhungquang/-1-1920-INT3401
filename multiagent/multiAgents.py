@@ -343,7 +343,7 @@ def betterEvaluationFunction(currentGameState):
     #    return float("inf")
     if newScaredTimes>1:
         ghostDistance=1/ghostDistance
-    evaluation = currentGameState.getScore()+2*ghostDistance/(minDistance)
+    evaluation = currentGameState.getScore()+2*ghostDistance/(minDistance+len(currentGameState.getFood().asList()))
     return evaluation
     #util.raiseNotDefined()
 
