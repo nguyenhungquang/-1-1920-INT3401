@@ -321,6 +321,8 @@ def betterEvaluationFunction(currentGameState):
     newFood = currentGameState.getFood()
     newGhostStates = currentGameState.getGhostStates()
     newScaredTimes = [ghostState.scaredTimer for ghostState in newGhostStates]
+    foodSet=[]
+    heuristicVal=0
     #isStop=0
     #if action=="Stop":
     #    isStop=2
@@ -331,19 +333,24 @@ def betterEvaluationFunction(currentGameState):
     for i in newFood:
         for j in i:
             if newFood[m][n]:
+                foodSet.append((m,n))
                 minDistance=min(minDistance,manhattanDistance(newPos,(m,n)))
                 #print m,n,newPos,minDistance
             n+=1
         n=0
         m+=1
+    if len(foodSet)>0:
+        firstFood=foodSet[0]
+        diameter,lastFood=max((manhattanDistance(firstFood,otherFood),otherFood) for otherFood in foodSet)
+        heuristicVal=min(manhattanDistance(newPos,x) for x in (firstFood,lastFood))+diameter
+    #else:
+    #    heuristicVal=-float("inf")
     ghostDistance=min([manhattanDistance(newPos,ghost.getPosition()) for ghost in newGhostStates])
     if ghostDistance<=1:
-        return 0
-    #if newFood[newPos[0]][newPos[1]]:
-    #    return float("inf")
+        return -float("inf")
     if newScaredTimes>1:
-        ghostDistance=1/ghostDistance
-    evaluation = currentGameState.getScore()+2*ghostDistance/(minDistance+len(currentGameState.getFood().asList()))
+        ghostDistance=-0.5*ghostDistance
+    evaluation = currentGameState.getScore()+ghostDistance-heuristicVal-20*len(foodSet)
     return evaluation
     #util.raiseNotDefined()
 
