@@ -88,6 +88,6 @@ class PerceptronClassifier:
         featuresWeights = [e[1] for e in wy[:100]]
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        #util.raiseNotDefined()
 
         return featuresWeights

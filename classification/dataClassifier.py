@@ -76,14 +76,42 @@ def enhancedFeatureExtractorDigit(datum):
     ##
     """
     features =  basicFeatureExtractorDigit(datum)
-
+    numberOfComps=numberOfComponents(features,datum)
+    features[1]=0
+    features[2]=0
+    features[3]=0
+    features[numberOfComps]=1
+    #features[number_of_intersections(features)]=1
     return features
-
-def number_of_intersections(features):
+def generateNeighbor(datum,features,s,visited):
+    neighbor=[(s[0]+1,s[1]+1),(s[0]+1,s[1]-1),(s[0]-1,s[1]+1),(s[0]-1,s[1]-1),(s[0],s[1]+1),(s[0],s[1]-1),(s[0]+1,s[1]),(s[0]-1,s[1])]
+    neighbors=[]
+    for x in neighbor:
+        if (x in features and datum.getPixel(x[0],x[1]) ==0 and visited[x]==False):
+            neighbors.append(x)
+    #print neighbors
+    #neighbors=[x for x in neighbor if (x[0]>=0 && x[1]>=0&&features[s]==0)] 
+    return neighbors
+def bfs(datum,features,s,visited):
+    #visited=[False]*DIGIT_DATUM_WIDTH*DIGIT_DATUM_HEIGHT
+    queue=[]
+    queue.append(s)
+    visited[s]=True
+    while queue:
+        s=queue.pop(0)
+        for i in generateNeighbor(datum,features,s,visited):
+            if visited[i]==False:
+                queue.append(i)
+                visited[i]=True
+def numberOfComponents(features,datum):
+    visited=util.Counter()
+    for s in features:
+        visited[s]=False
+    #visited=[False]*DIGIT_DATUM_WIDTH*DIGIT_DATUM_HEIGHT
     count=0
-    middle_point_x=DIGIT_DATUM_WIDTH/2
-    for i in range(DIGIT_DATUM_HEIGHT-1):
-        if features[middle_point_x,i+1]!=features[middle_point_x,i]:
+    for s in features:
+        if visited[s]==False and features[s]==0:
+            bfs(datum,features,s,visited)
             count+=1
     return count
 def basicFeatureExtractorPacman(state):
