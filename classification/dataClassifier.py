@@ -86,11 +86,11 @@ def enhancedFeatureExtractorDigit(datum):
 def generateNeighbor(datum,features,s,visited):
     neighbor=[(s[0]+1,s[1]+1),(s[0]+1,s[1]-1),(s[0]-1,s[1]+1),(s[0]-1,s[1]-1),(s[0],s[1]+1),(s[0],s[1]-1),(s[0]+1,s[1]),(s[0]-1,s[1])]
     neighbors=[]
-    for x in neighbor:
-        if (x in features and datum.getPixel(x[0],x[1]) ==0 and visited[x]==False):
-            neighbors.append(x)
+    #for x in neighbor:
+    #    if (x in features and datum.getPixel(x[0],x[1]) ==0 and visited[x]==False):
+    #        neighbors.append(x)
     #print neighbors
-    #neighbors=[x for x in neighbor if (x[0]>=0 && x[1]>=0&&features[s]==0)] 
+    neighbors=[x for x in neighbor if (x in features and datum.getPixel(x[0],x[1]) ==0 and visited[x]==False)] 
     return neighbors
 def bfs(datum,features,s,visited):
     #visited=[False]*DIGIT_DATUM_WIDTH*DIGIT_DATUM_HEIGHT
